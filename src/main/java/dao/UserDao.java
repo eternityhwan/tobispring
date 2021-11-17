@@ -12,15 +12,7 @@ public abstract class UserDao {
 
     // 중복코드 추출 실시한다.
     public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-    //{
-//        Class.forName("com.mysql.cj.jdbc.Driver"); // 클래스를 forname으로 찾으라는 명령이다, 괄호에는 Driver url을 넣어주면 됨.
-//        Connection c = DriverManager.getConnection( // :는 프로토콜 다음에 써줌
-//                "jdbc:mysql://localhost/carlkim", "root", "3642");
-        // url 쓰는 방법 - jdbc(자바에서데이터연결커넥하니까)프로토콜:mysql(데이터베이스서버프로그램이름)://호스트명/데이터베이스이름
-        // --- class 변수로 넣어주면 메소드 작성 할 때마다 연결 메소드 안넣어줘도 됨. ---
-        // ------------ 여기까지하면 연결은 끝나는 거임 ----------------------------
-//        return c;
-//    }
+
 
 
     public void add(User user) throws ClassNotFoundException, SQLException {
@@ -31,9 +23,8 @@ public abstract class UserDao {
         Connection c = getConnection();
         PreparedStatement ps = c.prepareStatement(
                 "insert into Users(Userid, name, password) values(?,?,?)");
-
         //각각의 ps 스트링으로 들어감
-        ps.setString(1, user.getId());
+        ps.setInt(1, user.getId());
         ps.setString(2, user.getName());
         ps.setString(3, user.getPassword());
 
@@ -65,7 +56,7 @@ public abstract class UserDao {
 
 
            User user = new User();
-           user.setId(rs.getString("userid"));
+           user.setId(rs.getInt("userid"));
            user.setName(rs.getString("name"));
            user.setPassword(rs.getString("password"));
 
