@@ -5,18 +5,22 @@ import domain.User;
 
 import java.sql.*;
 
-        // 템플릿 메소드 패턴임
-        // 이 템플릿 메소드를 추상 메소드로 만들어서 독립 시킬 것이야.
+public class UserDao {
 
-public abstract class UserDao {
-         // 중복코드 추출 실시한다.
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+    private ConnectionMaker connectionMaker;
+
+    public UserDao(ConnectionMaker connectionMaker) {
+       this.connectionMaker = connectionMaker;
+    }
+    // 나중에 문제 생기면 일일이 수정을 다 해줘야함
+    // 그러니까 인터페이스를 쓰라고 그게 이 책의 결론
+    // 커넥션이라는 인터페이스를 만들어서 본문 수정 없이 하겠다는 것이 스프링의 본 목적
 
     public void add(User user) throws ClassNotFoundException, SQLException {
         // 1. 데이터 베이스와 연결하기 위해 커넥션을 가져온다.
         // 2. 하지만 커넥션은 드라이버가 있어야해 (드라이버를 먼저 잡고 그다음 connection을 해주면된다 간단함)
         // ------------ 여기서부터는 인서트 영역 ----------
-        Connection c = getConnection();
+        Connection c = connectionMaker.makeConnection();;
         PreparedStatement ps = c.prepareStatement(
                 "insert into Users(Userid, name, password) values(?,?,?)");
         //각각의 ps 스트링으로 들어감
@@ -39,7 +43,7 @@ public abstract class UserDao {
             // 1. 데이터 베이스와 연결하기 위해 커넥션을 가져온다.
             // 2. 하지만 커넥션은 드라이버가 있어야해 (드라이버를 먼저 잡고 그다음 connection을 해주면된다 간단함)
 
-            Connection c = getConnection();
+            Connection c = connectionMaker.makeConnection();
             PreparedStatement ps = c.prepareStatement
                     ("select * from users where userid = ?"); // <- userid 컬럼 순서를 변수로 삼겠다는거임 ? 정해지지 않음.
 
