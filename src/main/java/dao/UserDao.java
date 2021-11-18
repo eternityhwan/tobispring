@@ -5,20 +5,16 @@ import domain.User;
 
 import java.sql.*;
 
-// 템플릿 메소드 패턴임
-// 이 템플릿 메소드를 추상 메소드로 만들어서 독립 시킬 것이야.
+        // 템플릿 메소드 패턴임
+        // 이 템플릿 메소드를 추상 메소드로 만들어서 독립 시킬 것이야.
 
 public abstract class UserDao {
-
-    // 중복코드 추출 실시한다.
+         // 중복코드 추출 실시한다.
     public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-
-
 
     public void add(User user) throws ClassNotFoundException, SQLException {
         // 1. 데이터 베이스와 연결하기 위해 커넥션을 가져온다.
         // 2. 하지만 커넥션은 드라이버가 있어야해 (드라이버를 먼저 잡고 그다음 connection을 해주면된다 간단함)
-
         // ------------ 여기서부터는 인서트 영역 ----------
         Connection c = getConnection();
         PreparedStatement ps = c.prepareStatement(
